@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: devdb
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  django:
+    build:
+      context: ./backend/django_api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/django_api:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=1
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=devpass
+      - DB_HOST=db
+      - DB_PORT=5432
+
+  symfony:
+    build:
+      context: ./backend/symfony_service
+    volumes:
+      - ./backend/symfony_service:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+      - symfony
+  
+  frontend:
+    build:
+      context: ./frontend/app
+    volumes:
+      - ./frontend/app:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    command: npm run dev -- --host
+    depends_on:
+      - django
+
+
+
+volumes:
+  postgres_data:
