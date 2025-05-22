@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../api/axios'
+import Card from '../components/ui/Card'
+import PageWrapper from '../components/layout/PageWrapper'
 
 interface Project {
   id: number
@@ -30,17 +32,22 @@ export default function Projects() {
   }, [])
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">📂 Mes Projets</h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <div key={project.id} className="bg-white rounded shadow p-4 hover:shadow-md transition">
-            <h3 className="text-xl font-semibold text-blue-600">{project.name}</h3>
-            <p className="text-gray-600 mt-2">{project.description}</p>
-            <p className="text-sm text-gray-400 mt-4">Créé le : {new Date(project.created_at).toLocaleDateString()}</p>
-          </div>
-        ))}
+    <PageWrapper>
+      <div className="w-full max-w-7xl">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">📂 Mes Projets</h2>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <Card key={project.id}>
+              <h3 className="text-xl font-semibold text-blue-600">{project.name}</h3>
+              <p className="text-sm mt-2 text-gray-700 dark:text-gray-300">{project.description}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                Créé le : {new Date(project.created_at).toLocaleDateString()}
+              </p>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   )
 }
