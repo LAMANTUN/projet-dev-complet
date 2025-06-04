@@ -11,12 +11,6 @@ function App() {
       .catch((err) => setError("Erreur : " + err.message))
   }, [])
   return (
-    <div className="bg-red-500 text-white text-2xl p-10">
-      TAILWIND ACTIF 🔥
-    </div>
-  )
-
-  return (
     <div className="max-w-3xl mx-auto mt-16 p-6 bg-white rounded shadow-md text-gray-800">
       <h1 className="text-3xl font-bold text-blue-600 mb-4">🎓 Projet Vitrine Full-Stack</h1>
 

@@ -30,15 +30,6 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
 
-  symfony:
-    build:
-      context: ./backend/symfony_service
-    volumes:
-      - ./backend/symfony_service:/var/www/html
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
 
   nginx:
     image: nginx:alpine
@@ -48,7 +39,6 @@ services:
       - "80:80"
     depends_on:
       - django
-      - symfony
   
   frontend:
     build:
